@@ -1,0 +1,66 @@
+# Model Configuration / 模型配置
+# Configuration file for Qwen3-30B-A3B-Instruct-2507 quantization evaluation
+# Qwen3-30B-A3B-Instruct-2507 量化评估配置文件
+
+model:
+  # Base model identifier / 基础模型标识符
+  base_name: "Qwen/Qwen3-30B-A3B-Instruct-2507"
+  
+  # Model variants to test / 要测试的模型变体
+  variants:
+    - name: "original"
+      description: "Original precision (FP16/BF16) / 原精度 (FP16/BF16)"
+      quantization: null
+      kv_cache_dtype: "auto"
+      
+    - name: "fp8"
+      description: "FP8 quantization / FP8 量化"
+      quantization: "fp8"
+      kv_cache_dtype: "fp8"
+      
+    - name: "awq"
+      description: "AWQ 4-bit quantization / AWQ 4位量化"
+      quantization: "awq"
+      kv_cache_dtype: "auto"
+
+# Evaluation datasets / 评估数据集
+datasets:
+  - name: "gsm8k"
+    description: "Grade School Math 8K / 小学数学8K"
+    type: "math_reasoning"
+    num_samples: 1319  # Full test set / 完整测试集
+    
+  - name: "hellaswag"
+    description: "HellaSwag common sense reasoning / HellaSwag 常识推理"
+    type: "multiple_choice"
+    num_samples: 10000
+    
+  - name: "mmlu"
+    description: "Massive Multitask Language Understanding / 大规模多任务语言理解"
+    type: "multiple_choice"
+    num_samples: 15908
+
+# Server configuration / 服务器配置
+server:
+  host: "127.0.0.1"
+  port: 8000
+  tensor_parallel_size: 1
+  max_model_len: 8192
+  gpu_memory_utilization: 0.9
+  trust_remote_code: true
+
+# Generation parameters / 生成参数
+generation:
+  temperature: 0.0
+  max_tokens: 512
+  top_p: 1.0
+  seed: 42
+
+# Benchmark settings / 基准测试设置
+benchmark:
+  num_warmup_iterations: 3
+  num_runs: 5
+  collect_latency: true
+  collect_throughput: true
+  collect_memory: true
+
